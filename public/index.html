@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>sockets</title>
+		<link rel="stylesheet" href="./css/Bootstrap/bootstrap.min.css" />
+	</head>
+  <style>
+    [v-cloak]{
+      display: none;
+    }
+    ul {
+      list-style: none;
+    }
+  </style>
+	<body >
+		<div v-cloak id="app" class="container">
+			<p>
+				Server Status
+				<span
+					id="lblOnline"
+					v-text="serverStatus"
+					:class="[serverStatus === 'online' ? 'text-success':'text-danger']"
+				></span>
+			</p>
+
+			<div v-if="!ready">
+				<h4>Enter your username</h4>
+				<form @submit.prevent="">
+					<div class="form-group row">
+						<input
+							type="text"
+							class="form-control col-9"
+							v-model="id"
+							placeholder="Enter username here"
+						/>
+						<button
+							type="submit"
+							@click="ready = true"
+							class="btn btn-sm btn-info ml-1"
+						/>Join</button>
+					</div>
+				</form>
+			</div>
+			<div v-if="ready">
+        <div class="row">
+          <h2>Mensajes</h2>
+        </div>
+        <div class="row" v-if="totalMessages > 0">
+          <ul>
+            <li v-for="message in messages"></span>
+              <span class="text-muted" v-text="message.id"></span>
+              <p v-text="message.message"></p>
+              <small class="text-muted">{{message.fecha}}</small>
+            </li>
+          </ul>
+        </div>
+        <form @submit.prevent="">
+					<div class="form-group row">
+						<input
+							type="text"
+							class="form-control col-9"
+							v-model="txtMensaje" 
+							placeholder="Type a message"
+						/>
+						<button
+							type="submit"
+							@click="send"
+							class="btn btn-sm btn-info ml-1"
+						/>Send</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<script src="./socket.io/socket.io.js"></script>
+		<script src="./js/VueCDN/vue.js"></script>
+		<script src="./js/socket-client.js"></script>
+	</body>
+</html>
