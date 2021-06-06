@@ -35,10 +35,14 @@
 							class="form-control col-9"
 							v-model="id"
 							placeholder="Enter username here"
+              minlength="3"
+              min="3"
+              required
+              autofocus
 						/>
 						<button
 							type="submit"
-							@click="ready = true"
+							@click="checkId"
 							class="btn btn-sm btn-info ml-1"
 						/>Join</button>
 					</div>
@@ -64,12 +68,19 @@
 							class="form-control col-9"
 							v-model="txtMensaje" 
 							placeholder="Type a message"
+              required
+              autofocus
 						/>
 						<button
 							type="submit"
 							@click="send"
 							class="btn btn-sm btn-info ml-1"
 						/>Send</div>
+            <button
+              type="button"
+              @click="clear"
+              class="btn btn-sm btn-danger"
+            />limpiar</button>
 					</div>
 				</form>
 			</div>

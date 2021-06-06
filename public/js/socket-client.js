@@ -7,7 +7,7 @@ const app = new Vue({
 		messages: [{}],
 		serverStatus: "offline",
 		txtMensaje: "",
-		id: " ",
+		id: "",
 		days: [
 			"Sunday",
 			"Monday",
@@ -22,6 +22,7 @@ const app = new Vue({
 		socket.on("connect", () => {
 			this.serverStatus = "online";
 			console.log("Conectado");
+			this.getMensajes();
 		});
 
 		socket.on("disconnect", () => {
@@ -35,7 +36,7 @@ const app = new Vue({
 	},
 	computed: {
 		totalMessages() {
-      if (this.messages.length > 10) {
+			if (this.messages.length > 10) {
 				this.messages.shift();
 			}
 			return this.messages.length;
@@ -44,6 +45,7 @@ const app = new Vue({
 
 	methods: {
 		send() {
+      if(this.txtMensaje.length > 0){
 			const d = new Date();
 			const mensaje = this.txtMensaje;
 			const payload = {
@@ -54,11 +56,30 @@ const app = new Vue({
 			};
 			this.messages.push(payload);
 
-			socket.emit("enviar-mensaje", payload, (id) => {
-				console.log("respuesta desde el servidor ", id);
+			socket.emit("enviar-mensaje", payload, (data) => {
+				this.messages = data;
 			});
-			this.txtMensaje = "";
-			
+			this.txtMensaje = "";}
+		},
+		clear() {
+      if(confirm('borrar mensajes?')){
+      this.messages.length = 0
+      const payload = this.messages
+      socket.emit('clear-mensajes', payload, (data) => {
+        console.log(data)
+      })}
+      this.txtMensaje = " ";
+    },
+    checkId(){
+      if(this.id.length > 2){
+        this.ready=true
+      }
+    },
+		getMensajes() {
+			let payload = "";
+			socket.emit("get-mensajes", payload, (data) => {
+				this.messages = data;
+			});
 		},
 	},
 });
